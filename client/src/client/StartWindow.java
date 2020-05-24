@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 import static network.TCPConnection.SERVERPORT;
 
-public class StartWindow<IP> extends JFrame implements ActionListener {
+public class StartWindow extends JFrame implements ActionListener {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 100;
 
