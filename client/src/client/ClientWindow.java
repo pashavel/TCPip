@@ -18,6 +18,7 @@ public  class ClientWindow extends JFrame implements ActionListener, TCPConnecti
     private final JTextArea log = new JTextArea();
     private final JTextField fieldNickname = new JTextField();
     private final JTextField fieldInput = new JTextField();
+    private final JScrollPane scrollPane = new JScrollPane(log);
     private TCPConnection connection;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -36,7 +37,7 @@ public  class ClientWindow extends JFrame implements ActionListener, TCPConnecti
         setLocationRelativeTo(null);
         log.setEditable(false);
         log.setLineWrap(true);
-        add(log, BorderLayout.CENTER);
+        add(scrollPane,BorderLayout.CENTER);
         fieldInput.addActionListener(this);
         add(fieldInput, BorderLayout.SOUTH);
         add(fieldNickname, BorderLayout.NORTH);
@@ -84,7 +85,8 @@ public  class ClientWindow extends JFrame implements ActionListener, TCPConnecti
             @Override
             public void run() {
                 log.append(message + "\n");
-                log.setCaretPosition(log.getDocument().getLength());
+                log.setCaretPosition(log.getText().length());
+                log.getCaret().setVisible(false);
             }
         });
     }
