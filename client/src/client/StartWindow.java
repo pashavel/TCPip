@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class StartWindow extends JFrame implements ActionListener {
+public class StartWindow<IP> extends JFrame implements ActionListener {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 200;
     public static void main(String[] args) {
@@ -23,10 +23,16 @@ public class StartWindow extends JFrame implements ActionListener {
     private final JTextArea log = new JTextArea();
     private final JTextField fieldNickname = new JTextField("guest");
     private final JTextField fieldInputIp = new JTextField();
+    private static String[] IP ={"",""} ;
+    private void splitIpPort()
+    {
+        IP = fieldInputIp.getText().split(":",2);
+    }
     JButton buttonCreate = new JButton("Create");
     class joinListenerAction extends Thread implements ActionListener {
         public synchronized void actionPerformed(ActionEvent e) {
-            ClientWindow.main(new String[]{"127.0.0.1","8188",fieldNickname.getText()});
+            splitIpPort();
+            ClientWindow.main(new String[]{IP[0],IP[1],fieldNickname.getText()});
             buttonCreate.setEnabled(false);
             StartWindow.this.setVisible(false);
         }
@@ -70,6 +76,7 @@ public class StartWindow extends JFrame implements ActionListener {
         log.setText("Hello");
         add(log, BorderLayout.NORTH);
         add(fieldNickname,BorderLayout.NORTH);
+        add(fieldInputIp,BorderLayout.SOUTH);
         add(buttonJoin,BorderLayout.EAST);
         add(buttonCreate,BorderLayout.WEST);
         setVisible(true);
