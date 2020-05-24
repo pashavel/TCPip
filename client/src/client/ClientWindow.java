@@ -14,11 +14,10 @@ import static network.TCPConnection.SERVERPORT;
 public class ClientWindow extends JFrame implements ActionListener, TCPConnectionListener {
     private static String IP_ADDR = "";
     private static int PORT = SERVERPORT;
-    private static String username = "";
+    public static String username = "";
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
     private final JTextArea log = new JTextArea();
-    private final JTextField fieldNickname = new JTextField();
     private final JTextField fieldInput = new JTextField();
     private final JScrollPane scrollPane = new JScrollPane(log);
     private TCPConnection connection;
@@ -44,12 +43,10 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
         add(scrollPane, BorderLayout.CENTER);
         fieldInput.addActionListener(this);
         add(fieldInput, BorderLayout.SOUTH);
-        add(fieldNickname, BorderLayout.NORTH);
-        fieldNickname.setText(username);
-        fieldNickname.setEditable(false);
+
         setVisible(true);
         try {
-            connection = new TCPConnection(this, IP_ADDR, PORT);
+            connection = new TCPConnection(this, IP_ADDR, PORT,username);
         } catch (IOException e) {
             printMessage("Connection exception: " + e);
         }
@@ -60,7 +57,7 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
         String message = fieldInput.getText();
         if (message.equals("")) return;
         fieldInput.setText(null);
-        connection.sendString(fieldNickname.getText() + ": " + message);
+        connection.sendString(username+ ": " + message);
     }
 
     @Override
