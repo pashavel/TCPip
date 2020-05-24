@@ -7,9 +7,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static network.TCPConnection.SERVERPORT;
+
 public class StartWindow<IP> extends JFrame implements ActionListener {
     private static final int WIDTH = 300;
-    private static final int HEIGHT = 200;
+    private static final int HEIGHT = 100;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -21,10 +23,8 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
 
 
     }
-
-    private final JTextArea log = new JTextArea();
     private final JTextField fieldNickname = new JTextField("guest");
-    private final JTextField fieldInputIp = new JTextField();
+    private final JTextField fieldInputIp = new JTextField("127.0.0.1");
     private static String[] IP = {"", ""};
 
     private void splitIpPort() {
@@ -37,7 +37,6 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
     }
 
     JButton buttonCreate = new JButton("Create");
-
     class joinListenerAction extends Thread implements ActionListener {
         public synchronized void actionPerformed(ActionEvent e) {
             splitIpPort();
@@ -62,7 +61,7 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
                         @Override
                         public void run() {
 
-                            ClientWindow.main(new String[]{"127.0.0.1", "8188", fieldNickname.getText()});
+                            ClientWindow.main(new String[]{"127.0.0.1", String.valueOf(SERVERPORT), fieldNickname.getText()});
                         }
                     });
                     createClientThread.start();
@@ -82,10 +81,6 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
-        log.setEditable(false);
-        log.setLineWrap(true);
-        log.setText("Hello");
-        add(log, BorderLayout.NORTH);
         add(fieldNickname, BorderLayout.NORTH);
         add(fieldInputIp, BorderLayout.SOUTH);
         add(buttonJoin, BorderLayout.EAST);

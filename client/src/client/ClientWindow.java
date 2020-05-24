@@ -9,9 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import static network.TCPConnection.SERVERPORT;
+
 public class ClientWindow extends JFrame implements ActionListener, TCPConnectionListener {
     private static String IP_ADDR = "";
-    private static int PORT = 8188;
+    private static int PORT = SERVERPORT;
     private static String username = "";
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;

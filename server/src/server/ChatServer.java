@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
+import static network.TCPConnection.SERVERPORT;
+
 public class ChatServer implements TCPConnectionListener {
     public static void main(String[] args) {
         new ChatServer();
@@ -14,7 +16,7 @@ public class ChatServer implements TCPConnectionListener {
     private final ArrayList<TCPConnection> connections = new ArrayList<TCPConnection>();
     private ChatServer(){
         System.out.println("Server running...");
-        try(ServerSocket serverSocket = new ServerSocket(8188);) {
+        try(ServerSocket serverSocket = new ServerSocket(SERVERPORT);) {
             while(true)
             {
                 try{

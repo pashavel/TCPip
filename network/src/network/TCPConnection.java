@@ -10,6 +10,7 @@ public class TCPConnection {
     private final TCPConnectionListener eventListener;
     private final BufferedReader in;
     private final BufferedWriter out;
+    public static final int SERVERPORT = 8187;
     public TCPConnection(TCPConnectionListener eventListener,String ipAddress,int port) throws IOException{
         this(eventListener,new Socket(ipAddress,port));
     }
