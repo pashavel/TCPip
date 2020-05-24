@@ -28,7 +28,12 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
     private static String[] IP = {"", ""};
 
     private void splitIpPort() {
+        if(fieldInputIp.getText().contains(":"))
         IP = fieldInputIp.getText().split(":", 2);
+        else{
+            IP[0]=fieldInputIp.getText();
+            IP[1]="";
+        }
     }
 
     JButton buttonCreate = new JButton("Create");
