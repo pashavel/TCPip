@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 public class StartWindow<IP> extends JFrame implements ActionListener {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 200;
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -19,24 +20,28 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
         });
 
 
-        }
+    }
+
     private final JTextArea log = new JTextArea();
     private final JTextField fieldNickname = new JTextField("guest");
     private final JTextField fieldInputIp = new JTextField();
-    private static String[] IP ={"",""} ;
-    private void splitIpPort()
-    {
-        IP = fieldInputIp.getText().split(":",2);
+    private static String[] IP = {"", ""};
+
+    private void splitIpPort() {
+        IP = fieldInputIp.getText().split(":", 2);
     }
+
     JButton buttonCreate = new JButton("Create");
+
     class joinListenerAction extends Thread implements ActionListener {
         public synchronized void actionPerformed(ActionEvent e) {
             splitIpPort();
-            ClientWindow.main(new String[]{IP[0],IP[1],fieldNickname.getText()});
+            ClientWindow.main(new String[]{IP[0], IP[1], fieldNickname.getText()});
             buttonCreate.setEnabled(false);
             StartWindow.this.setVisible(false);
         }
     }
+
     class createListenerAction implements ActionListener {
         public synchronized void actionPerformed(ActionEvent e) {
             SwingUtilities.invokeLater(new Runnable() {
@@ -52,7 +57,7 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
                         @Override
                         public void run() {
 
-                            ClientWindow.main(new String[]{"127.0.0.1","8188",fieldNickname.getText()});
+                            ClientWindow.main(new String[]{"127.0.0.1", "8188", fieldNickname.getText()});
                         }
                     });
                     createClientThread.start();
@@ -65,7 +70,8 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
     }
 
     JButton buttonJoin = new JButton("Join");
-    public StartWindow(){
+
+    public StartWindow() {
         buttonJoin.addActionListener(new joinListenerAction());
         buttonCreate.addActionListener(new createListenerAction());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -75,12 +81,13 @@ public class StartWindow<IP> extends JFrame implements ActionListener {
         log.setLineWrap(true);
         log.setText("Hello");
         add(log, BorderLayout.NORTH);
-        add(fieldNickname,BorderLayout.NORTH);
-        add(fieldInputIp,BorderLayout.SOUTH);
-        add(buttonJoin,BorderLayout.EAST);
-        add(buttonCreate,BorderLayout.WEST);
+        add(fieldNickname, BorderLayout.NORTH);
+        add(fieldInputIp, BorderLayout.SOUTH);
+        add(buttonJoin, BorderLayout.EAST);
+        add(buttonCreate, BorderLayout.WEST);
         setVisible(true);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
