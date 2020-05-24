@@ -26,30 +26,40 @@ public class StartWindow extends JFrame implements ActionListener {
     JButton buttonCreate = new JButton("Create");
     class joinListenerAction extends Thread implements ActionListener {
         public synchronized void actionPerformed(ActionEvent e) {
-           ClientWindow.main(new String[]{"127.0.0.1"});
+            ClientWindow.main(new String[]{"127.0.0.1","8188",fieldNickname.getText()});
+            buttonCreate.setEnabled(false);
+            StartWindow.this.setVisible(false);
         }
     }
     class createListenerAction implements ActionListener {
         public synchronized void actionPerformed(ActionEvent e) {
-            Thread createServerThread = new Thread(new Runnable() {
+            SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    ChatServer.main(new String[]{""});
+                    Thread createServerThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ChatServer.main(new String[]{""});
+                        }
+                    });
+                    Thread createClientThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            ClientWindow.main(new String[]{"127.0.0.1","8188",fieldNickname.getText()});
+                        }
+                    });
+                    createClientThread.start();
+                    createServerThread.start();
+                    buttonCreate.setEnabled(false);
+                    StartWindow.this.setVisible(false);
                 }
             });
-            Thread createClientThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ClientWindow.main(new String[]{"127.0.0.1","8188"});
-                }
-            });
-            createServerThread.run();
-            createClientThread.run();
         }
     }
 
     JButton buttonJoin = new JButton("Join");
-    private StartWindow(){
+    public StartWindow(){
         buttonJoin.addActionListener(new joinListenerAction());
         buttonCreate.addActionListener(new createListenerAction());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -59,6 +69,7 @@ public class StartWindow extends JFrame implements ActionListener {
         log.setLineWrap(true);
         log.setText("Hello");
         add(log, BorderLayout.NORTH);
+        add(fieldNickname,BorderLayout.NORTH);
         add(buttonJoin,BorderLayout.EAST);
         add(buttonCreate,BorderLayout.WEST);
         setVisible(true);

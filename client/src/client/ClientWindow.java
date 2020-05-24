@@ -9,26 +9,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class ClientWindow extends JFrame implements ActionListener, TCPConnectionListener {
-    private static final String IP_ADDR = "127.0.0.1";
-    private static final int PORT = 8188;
+public  class ClientWindow extends JFrame implements ActionListener, TCPConnectionListener {
+    private static String IP_ADDR = "";
+    private static int PORT =8188;
+    private static String username="";
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
-
+    private final JTextArea log = new JTextArea();
+    private final JTextField fieldNickname = new JTextField();
+    private final JTextField fieldInput = new JTextField();
+    private TCPConnection connection;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                IP_ADDR= args[0];
+                PORT= Integer.parseInt(args[1]);
+                username = args[2];
                 new ClientWindow();
             }
         });
     }
-
-    private final JTextArea log = new JTextArea();
-    private final JTextField fieldNickname = new JTextField("guest");
-    private final JTextField fieldInput = new JTextField();
-    private TCPConnection connection;
-
     private ClientWindow() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
@@ -39,6 +40,8 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
         fieldInput.addActionListener(this);
         add(fieldInput, BorderLayout.SOUTH);
         add(fieldNickname, BorderLayout.NORTH);
+        fieldNickname.setText(username);
+        fieldNickname.setEditable(false);
         setVisible(true);
         try {
             connection = new TCPConnection(this, IP_ADDR, PORT);
