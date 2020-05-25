@@ -5,7 +5,6 @@ import network.TCPConnectionListener;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 
 import static network.TCPConnection.SERVERPORT;
@@ -14,17 +13,14 @@ public class ChatServer implements TCPConnectionListener {
     public static void main(String[] args) {
         new ChatServer();
     }
-    private final ArrayList<TCPConnection> connections = new ArrayList<TCPConnection>();
+    private final ArrayList<TCPConnection> connections = new ArrayList<>();
     private ChatServer(){
         System.out.println("Server running...");
         try(ServerSocket serverSocket = new ServerSocket(SERVERPORT)) {
             while(true)
             {
                 try{
-                    Socket socket = new Socket();
-                    socket = serverSocket.accept();
-
-                    new TCPConnection(this,socket,);
+                    new TCPConnection(this,serverSocket.accept());
                 }catch (IOException e)
                 {
                     System.out.println("TCPConnection exception: "+e);
@@ -52,16 +48,12 @@ public class ChatServer implements TCPConnectionListener {
     private synchronized void printMembersList(TCPConnection tcpConnection)
     {
         String temp = "";
-        for (int i = 0; i <connections.size() ; i++) {
-            temp+=connections.get(i);
-            temp+="\n";
-        }
+        for (TCPConnection connection : connections) temp += connection + "\n";
         tcpConnection.sendString(temp);
     }
     @Override
     public synchronized void onDisconnect(TCPConnection tcpConnection) {
     connections.remove(tcpConnection);
-
         sendToAllConnections("Client disconnected: " + tcpConnection);
     }
 
@@ -72,7 +64,7 @@ public class ChatServer implements TCPConnectionListener {
     private void sendToAllConnections(String value)
     {
         System.out.println(value);
-        final int cnt = connections.size();
-        for (int i = 0; i < cnt; i++) connections.get(i).sendString(value);
+       // final int cnt = connections.size();
+        for (TCPConnection connection : connections) connection.sendString(value);
     }
 }

@@ -20,14 +20,12 @@ public class StartWindow extends JFrame implements ActionListener {
                 new StartWindow();
             }
         });
-
-
     }
     private final JTextField fieldNickname = new JTextField("guest");
     private final JTextField fieldInputIp = new JTextField("127.0.0.1");
     private static String[] IP = {"", ""};
 
-    private void splitIpPort() {
+    private void splitIPandPort() {
         if(fieldInputIp.getText().contains(":"))
         IP = fieldInputIp.getText().split(":", 2);
         else{
@@ -39,7 +37,7 @@ public class StartWindow extends JFrame implements ActionListener {
     JButton buttonCreate = new JButton("Create");
     class joinListenerAction extends Thread implements ActionListener {
         public synchronized void actionPerformed(ActionEvent e) {
-            splitIpPort();
+            splitIPandPort();
             ClientWindow.main(new String[]{IP[0], IP[1], fieldNickname.getText()});
             buttonCreate.setEnabled(false);
             StartWindow.this.setVisible(false);
@@ -60,13 +58,12 @@ public class StartWindow extends JFrame implements ActionListener {
                     Thread createClientThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-
                             ClientWindow.main(new String[]{"127.0.0.1", String.valueOf(SERVERPORT), fieldNickname.getText()});
                         }
                     });
                     createClientThread.start();
                     createServerThread.start();
-                    buttonCreate.setEnabled(false);
+                   // buttonCreate.setEnabled(false);
                     StartWindow.this.setVisible(false);
                 }
             });

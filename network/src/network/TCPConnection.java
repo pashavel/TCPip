@@ -10,17 +10,15 @@ public class TCPConnection {
     private final TCPConnectionListener eventListener;
     private final BufferedReader in;
     private final BufferedWriter out;
-    public String username="";
     public static final int SERVERPORT = 8187;
-    public TCPConnection(TCPConnectionListener eventListener,String ipAddress,int port,String username) throws IOException{
-        this(eventListener,new Socket(ipAddress,port),username);
+    public TCPConnection(TCPConnectionListener eventListener,String ipAddress,int port) throws IOException{
+        this(eventListener,new Socket(ipAddress,port));
     }
-    public TCPConnection(TCPConnectionListener eventListener, Socket socket, String username) throws IOException {
+    public TCPConnection(TCPConnectionListener eventListener, Socket socket) throws IOException {
         this.socket = socket;
-        this.username = username;
         this.eventListener = eventListener;
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.forName("UTF-8")));
-        out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-8")));
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.forName("UTF-32")));
+        out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-32")));
         rxThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -60,6 +58,6 @@ public class TCPConnection {
 
     @Override
     public String toString() {
-        return  username+ " " + socket.getInetAddress() + ":"+socket.getPort();
+        return  socket.getInetAddress() + ":"+socket.getPort();
     }
 }
