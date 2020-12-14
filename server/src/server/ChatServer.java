@@ -13,17 +13,18 @@ public class ChatServer implements TCPConnectionListener {
     public static void main(String[] args) {
         new ChatServer();
     }
+
     private final ArrayList<TCPConnection> connections = new ArrayList<>();
-    private ChatServer(){
+
+    private ChatServer() {
         System.out.println("Server running...");
-        try(ServerSocket serverSocket = new ServerSocket(SERVERPORT)) {
-            while(true)
-            {
-                try{
-                    new TCPConnection(this,serverSocket.accept());
-                }catch (IOException e)
-                {
-                    System.out.println("TCPConnection exception: "+e);
+        try (ServerSocket serverSocket = new ServerSocket(SERVERPORT)) {
+            while (true) {
+                try {
+                    new TCPConnection(this, serverSocket.accept());
+
+                } catch (IOException e) {
+                    System.out.println("TCPConnection exception: " + e);
                 }
             }
         } catch (IOException e) {
@@ -34,26 +35,24 @@ public class ChatServer implements TCPConnectionListener {
 
     @Override
     public synchronized void onConnectionReady(TCPConnection tcpConnection) {
-
         connections.add(tcpConnection);
         sendToAllConnections("Client connected: " + tcpConnection);
     }
 
     @Override
     public synchronized void onReceiveString(TCPConnection tcpConnection, String value) {
-        if(value.contains("/members")) printMembersList(tcpConnection);
-        else
         sendToAllConnections(value);
     }
-    private synchronized void printMembersList(TCPConnection tcpConnection)
-    {
-        String temp = "";
-        for (TCPConnection connection : connections) temp += connection + "\n";
-        tcpConnection.sendString(temp);
+
+    public synchronized void printMembersList(TCPConnection tcpConnection) {
+        StringBuilder temp = new StringBuilder();
+        for (TCPConnection connection : connections) temp.append(connection.toString()).append('\n');
+        tcpConnection.sendString(temp.toString());
     }
+
     @Override
     public synchronized void onDisconnect(TCPConnection tcpConnection) {
-    connections.remove(tcpConnection);
+        connections.remove(tcpConnection);
         sendToAllConnections("Client disconnected: " + tcpConnection);
     }
 
@@ -61,10 +60,9 @@ public class ChatServer implements TCPConnectionListener {
     public synchronized void onException(TCPConnection tcpConnection, Exception e) {
         System.out.println("TCPConnection exception: " + e);
     }
-    private void sendToAllConnections(String value)
-    {
+
+    private void sendToAllConnections(String value) {
         System.out.println(value);
-       // final int cnt = connections.size();
         for (TCPConnection connection : connections) connection.sendString(value);
     }
 }

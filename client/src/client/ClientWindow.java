@@ -23,14 +23,11 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
     private TCPConnection connection;
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                IP_ADDR = args[0];
-                if (!args[1].equals("")) PORT = Integer.parseInt(args[1]);
-                username = args[2];
-                new ClientWindow();
-            }
+        SwingUtilities.invokeLater(() -> {
+            IP_ADDR = args[0];
+            if (!args[1].equals("")) PORT = Integer.parseInt(args[1]);
+            username = args[2];
+            new ClientWindow();
         });
     }
 
@@ -70,7 +67,6 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
         printMessage(value);
     }
 
-
     @Override
     public void onDisconnect(TCPConnection tcpConnection) {
         printMessage("Connection lost");
@@ -82,13 +78,10 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
     }
 
     private synchronized void printMessage(String message) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                log.append(message + "\n");
-                log.setCaretPosition(log.getText().length());
-                log.getCaret().setVisible(false);
-            }
+        SwingUtilities.invokeLater(() -> {
+            log.append(message + "\n");
+            log.setCaretPosition(log.getText().length());
+            log.getCaret().setVisible(false);
         });
     }
 }

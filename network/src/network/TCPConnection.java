@@ -11,9 +11,12 @@ public class TCPConnection {
     private final BufferedReader in;
     private final BufferedWriter out;
     public static final int SERVERPORT = 8187;
-    public TCPConnection(TCPConnectionListener eventListener,String ipAddress,int port) throws IOException{
-        this(eventListener,new Socket(ipAddress,port));
+
+    public TCPConnection(TCPConnectionListener eventListener, String ipAddress, int port) throws IOException {
+        this(eventListener, new Socket(ipAddress, port));
+
     }
+
     public TCPConnection(TCPConnectionListener eventListener, Socket socket) throws IOException {
         this.socket = socket;
         this.eventListener = eventListener;
