@@ -59,8 +59,12 @@ public class TCPConnection {
         }
     }
 
+    public String getIp() {
+        return socket.getInetAddress().toString();
+    }
+
     @Override
     public String toString() {
-        return  socket.getInetAddress() + ":"+socket.getPort();
+        return socket.getInetAddress() + ":" + socket.getPort();
     }
 }

@@ -38,6 +38,7 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
         log.setEditable(false);
         log.setLineWrap(true);
         add(scrollPane, BorderLayout.CENTER);
+
         fieldInput.addActionListener(this);
         add(fieldInput, BorderLayout.SOUTH);
 
@@ -54,16 +55,18 @@ public class ClientWindow extends JFrame implements ActionListener, TCPConnectio
         String message = fieldInput.getText();
         if (message.equals("")) return;
         fieldInput.setText(null);
-        connection.sendString(username+ ": " + message);
+        connection.sendString(": " + message);
     }
 
     @Override
     public void onConnectionReady(TCPConnection tcpConnection) {
         printMessage("Connection ready...");
+        connection.sendString(username);
     }
 
     @Override
     public void onReceiveString(TCPConnection tcpConnection, String value) {
+
         printMessage(value);
     }
 
